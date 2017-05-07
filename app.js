@@ -1,4 +1,10 @@
 var express = require('express');
+var mongoose = require('mongoose');
+var mongooseDB = 'mongodb://127.0.0.1:27017/test';
+mongoose.connect(mongooseDB);
+var db = mongoose.connection;
+db.on('error',console.error.bind(console, 'MongoDB connection error:'));
+
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
