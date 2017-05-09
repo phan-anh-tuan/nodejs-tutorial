@@ -1,6 +1,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var mongooseDB = 'mongodb://127.0.0.1:27017/test';
+var mongooseDB = 'mongodb://127.0.0.1:27017/local_library';
 mongoose.connect(mongooseDB);
 var db = mongoose.connection;
 db.on('error',console.error.bind(console, 'MongoDB connection error:'));
