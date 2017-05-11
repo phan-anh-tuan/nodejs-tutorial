@@ -24,7 +24,19 @@ exports.book_list = function(req, res, next) {
 
 // Display detail page for a specific book
 exports.book_detail = function(req, res, next) {
-    res.send('NOT IMPLEMENTED: Book detail: ' + req.params.id);
+    async.parallel({
+        book: function(callback) {
+                Book.findById(req.params.id)
+                    .populate('author')
+                    .populate('genre')
+                    .exec(callback); },
+        book_instances: function(callback) {
+                            BookInstance.find({'book': req.params.id}).exec(callback);
+                        }
+    },function(err, results){
+        if (err) {return next(err);}
+        res.render('book_detail',{title:'Book Detail', book: results.book, book_instances: results.book_instances})
+    });
 };
 
 // Display book create form on GET
