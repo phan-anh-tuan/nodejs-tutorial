@@ -13,3 +13,7 @@ a {
     padding: 0;
     list-style: none;
 }
+
+.form-control {
+    max-width: 50%;
+}
