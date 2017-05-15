@@ -6,7 +6,7 @@ var async = require('async');
 exports.genre_list = function(req, res, next) {
     Genre.find().exec(function(err, results){
         if (err) {return next(err);}
-        res.render('genre_list',{title: 'Genres List', genre_list: results});
+        res.render('genre_list',{title: 'Genres List', genre_list: results, user: req.user});
     });
     
 };
@@ -22,13 +22,13 @@ exports.genre_detail = function(req, res, next) {
         }
     }, function(err, results){
         if (err) {return next(err);}
-        res.render('genre_detail',{title: 'Genre Detail', genre: results.genre, genre_books: results.genre_books});
+        res.render('genre_detail',{title: 'Genre Detail', genre: results.genre, genre_books: results.genre_books, user: req.user});
     });
 };
 
 // Display Genre create form on GET
 exports.genre_create_get = function(req, res, next) {
-    res.render('genre_form', {title:'Create Genre'});
+    res.render('genre_form', {title:'Create Genre', user: req.user});
 };
 
 // Handle Genre create on POST

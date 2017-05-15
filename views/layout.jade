@@ -10,6 +10,12 @@ html(lang='en')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     div(class='container-fluid')
+     if user 
+        div(style='float:right') Welcome #{user.username}&nbsp;
+         a(href='/logout') Sign out
+     else 
+        div(style='float:right')
+         a(href='/login') Login
      div(class='row')
       div(class='col-sm-2')
        block sidebar

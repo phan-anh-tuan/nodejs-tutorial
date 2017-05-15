@@ -12,14 +12,18 @@ exports.index = function(req, res, next) {
         author_count: function(callback) { Author.count(callback); },
         genre_count: function(callback) { Genre.count(callback); } 
     }, function(err, results){
-        res.render('index',{title:'Local Library Home', error: err, data: results});
+        res.render('index',{title:'Local Library Home', error: err, data: results, user: req.user});
     });
     
 };
 
 // Display list of all books
 exports.book_list = function(req, res, next) {
-    res.send('NOT IMPLEMENTED: Book list');
+    console.log('Authenticated User: ' + req.user);
+    Book.find({},'title author').populate('author').exec(function(err, book_list){
+        if (err) { return next(err) ; }
+        res.render("book_list",{title: "Book List", book_list:book_list, user: req.user});
+    })
 };
 
 // Display detail page for a specific book
@@ -35,7 +39,7 @@ exports.book_detail = function(req, res, next) {
                         }
     },function(err, results){
         if (err) {return next(err);}
-        res.render('book_detail',{title:'Book Detail', book: results.book, book_instances: results.book_instances})
+        res.render('book_detail',{title:'Book Detail', book: results.book, book_instances: results.book_instances, user: req.user})
     });
 };
 
@@ -50,7 +54,7 @@ exports.book_create_get = function(req, res, next) {
         }
     }, function(err, results) {
         if (err) { return next(err);}
-        res.render('book_form',{ title: 'Create Book', authors: results.authors, genres: results.genres});
+        res.render('book_form',{ title: 'Create Book', authors: results.authors, genres: results.genres, user: req.user});
     });
 };
 
