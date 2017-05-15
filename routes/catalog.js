@@ -1,5 +1,8 @@
 var express = require('express');
 var passport = require('passport');
+var multer  = require('multer');
+var upload = multer({ dest: 'uploads/' });
+
 var router = express.Router();
 
 // Require controller modules
@@ -18,7 +21,7 @@ router.get('/', book_controller.index);
 router.get('/book/create', book_controller.book_create_get);
 
 /* POST request for creating Book. */
-router.post('/book/create', book_controller.book_create_post);
+router.post('/book/create', upload.single('efile'), book_controller.book_create_post);
 
 /* GET request to delete Book. */
 router.get('/book/:id/delete', book_controller.book_delete_get);

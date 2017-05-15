@@ -1,7 +1,7 @@
 extends layout
 block content
  h1=title
- form(method='POST', action='')
+ form(method='POST', action='', enctype='multipart/form-data')
   div.form-group
    label(for='title') Title:
    input#title.form-control(type='text', placeholder='title', name='title', required='true', value=(undefined===book ? '':book.title))
@@ -24,6 +24,9 @@ block content
    each genre in genres
     input.checkbox-input(type='checkbox', name='genres', id=genre._id, value=genre.id, checked=genre.checked)
     label(for=genre._id, style='margin-right: 15px;') #{genre.name}
+  div.form-group
+   label(for='efile') eCopy:
+   input#efile.form-control(type='file', placeholder='electronic copy', name='efile', value='')   
   button.btn.btn-primary(type='submit') Submit
  if errors 
     ul

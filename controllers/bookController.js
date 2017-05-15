@@ -19,7 +19,6 @@ exports.index = function(req, res, next) {
 
 // Display list of all books
 exports.book_list = function(req, res, next) {
-    console.log('Authenticated User: ' + req.user);
     Book.find({},'title author').populate('author').exec(function(err, book_list){
         if (err) { return next(err) ; }
         res.render("book_list",{title: "Book List", book_list:book_list, user: req.user});
@@ -84,6 +83,8 @@ exports.book_create_post = function(req, res, next) {
         genre:(typeof req.body.genres === 'undefined') ? [] : req.body.genres.split(',')
     });
     console.log('BOOK: ' + book);
+    console.log('eFile: ' + req.file.filename);
+    
     if (errors) {
        async.parallel({
         authors: function(callback){
