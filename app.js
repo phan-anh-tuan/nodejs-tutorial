@@ -12,6 +12,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var session = require('express-session');
+var MongoDBStore = require('connect-mongodb-session')(session);
+
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
@@ -20,7 +22,14 @@ var users = require('./routes/users');
 var catalog = require('./routes/catalog');  //Import routes for "catalog" area of site
 
 var app = express();
-
+var store = new MongoDBStore(
+{
+uri: mongooseDB,
+collection: 'mySessions'
+});
+store.on('error', function(error) {
+      console.log(error.stack);
+});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -35,7 +44,8 @@ app.use(cookieParser());
 app.use(session({
     secret: 'keyboard cat',
     resave: true,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: store
 }));
 app.use(passport.initialize());
 app.use(passport.session());
