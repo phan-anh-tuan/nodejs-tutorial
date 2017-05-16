@@ -8,7 +8,7 @@ exports.author_list = function(req,res,next) {
          .sort([['family_name','ascending']])
          .exec(function(err, results){
             if (err) { next(err);}
-            res.render('author_list', {title:'Author List', author_list: results, user: req.user});
+            res.render('author_list', {title:'Author List', author_list: results});
    });
 };
 
@@ -23,13 +23,13 @@ exports.author_detail = function(req,res,next) {
         }
     },function(err, results){
         if (err) {return next(err);}
-        res.render('author_detail',{title: 'Author Detail', author: results.author, books: results.books, user: req.user});
+        res.render('author_detail',{title: 'Author Detail', author: results.author, books: results.books});
     });
 };
 
 // Display Author create form on GET
 exports.author_create_get = function(req, res, next) {
-    res.render('author_form',{title:'Create Author', user: req.user});
+    res.render('author_form',{title:'Create Author'});
 };
 
 // Handle Author create on POST

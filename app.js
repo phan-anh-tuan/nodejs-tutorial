@@ -24,11 +24,11 @@ var catalog = require('./routes/catalog');  //Import routes for "catalog" area o
 var app = express();
 var store = new MongoDBStore(
 {
-uri: mongooseDB,
-collection: 'mySessions'
+  uri: mongooseDB,
+  collection: 'mySessions'
 });
 store.on('error', function(error) {
-      console.log(error.stack);
+  console.log(error.stack);
 });
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -49,6 +49,10 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(function(req, res, next) {
+  res.locals.user = req.user;
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req,res,next){

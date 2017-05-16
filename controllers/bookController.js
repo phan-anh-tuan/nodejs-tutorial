@@ -12,7 +12,7 @@ exports.index = function(req, res, next) {
         author_count: function(callback) { Author.count(callback); },
         genre_count: function(callback) { Genre.count(callback); } 
     }, function(err, results){
-        res.render('index',{title:'Local Library Home', error: err, data: results, user: req.user});
+        res.render('index',{title:'Local Library Home', error: err, data: results});
     });
     
 };
@@ -21,7 +21,7 @@ exports.index = function(req, res, next) {
 exports.book_list = function(req, res, next) {
     Book.find({},'title author').populate('author').exec(function(err, book_list){
         if (err) { return next(err) ; }
-        res.render("book_list",{title: "Book List", book_list:book_list, user: req.user});
+        res.render("book_list",{title: "Book List", book_list:book_list});
     })
 };
 
@@ -38,7 +38,7 @@ exports.book_detail = function(req, res, next) {
                         }
     },function(err, results){
         if (err) {return next(err);}
-        res.render('book_detail',{title:'Book Detail', book: results.book, book_instances: results.book_instances, user: req.user})
+        res.render('book_detail',{title:'Book Detail', book: results.book, book_instances: results.book_instances})
     });
 };
 
@@ -53,7 +53,7 @@ exports.book_create_get = function(req, res, next) {
         }
     }, function(err, results) {
         if (err) { return next(err);}
-        res.render('book_form',{ title: 'Create Book', authors: results.authors, genres: results.genres, user: req.user});
+        res.render('book_form',{ title: 'Create Book', authors: results.authors, genres: results.genres});
     });
 };
 

@@ -5,7 +5,7 @@ var Book = require('../models/book');
 exports.bookinstance_list = function(req, res, next) {
     BookInstance.find().populate('book').exec(function(err, results){
         if (err) {return next(err);}
-        res.render('bookinstance_list',{title: 'Book Instance List', bookinstance_list:results, user: req.user});
+        res.render('bookinstance_list',{title: 'Book Instance List', bookinstance_list:results});
     });
 };
 
@@ -13,7 +13,7 @@ exports.bookinstance_list = function(req, res, next) {
 exports.bookinstance_detail = function(req, res, next) {
     BookInstance.findById(req.params.id).populate('book').exec(function(err,results){
         if (err) {return next(err);}
-        res.render('bookinstance_detail', {title:'Book Instance', bookinstance: results, user: req.user})
+        res.render('bookinstance_detail', {title:'Book Instance', bookinstance: results})
     });
 };
 
