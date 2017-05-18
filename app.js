@@ -65,13 +65,18 @@ app.use(function(req,res,next){
 app.use('/', index);
 app.use('/users', users);
 app.use('/catalog', catalog);
-
+app.use('/api/*', function(req,res,next){
+    res.json(req.cookies);
+    return;
+});
 
 // passport config
 var Account = require('./models/account');
 passport.use(new LocalStrategy(Account.authenticate()));
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
+
+require('express-debug')(app, {/* settings */});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
