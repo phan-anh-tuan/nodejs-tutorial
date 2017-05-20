@@ -19,22 +19,95 @@ exports.bookinstance_detail = function(req, res, next) {
 
 // Display BookInstance create form on GET
 exports.bookinstance_create_get = function(req, res, next) {
-    res.send('NOT IMPLEMENTED: BookInstance create GET');
+    Book.find({}, 'title', function(err, results) {
+        if (err) { return next(err);}
+        res.render('bookinstance_form',{ title: 'Create Book Instance', books: results});    
+    })
 };
 
 // Handle BookInstance create on POST
 exports.bookinstance_create_post = function(req, res, next) {
-    res.send('NOT IMPLEMENTED: BookInstance create POST');
+    //validate data
+    req.checkBody('book','Book is required').notEmpty();
+    req.checkBody('imprint','Imprint is required').notEmpty();
+    req.checkBody('due_back','Due date is required').notEmpty();
+    req.checkBody('due_back','Invalid date').isDate();
+    req.checkBody('status','Status is required').notEmpty();
+    //sanitize data
+    req.sanitize('book').escape();
+    req.sanitize('book').trim();
+    req.sanitize('imprint').escape();
+    req.sanitize('imprint').trim();
+    req.sanitize('due_back').toDate();
+    req.sanitize('status').escape();
+    req.sanitize('status').trim();
+    
+    var errors = req.validationErrors();
+    //create bookinstance
+    var bookinstance = new BookInstance({
+        book: req.body.book,
+        imprint: req.body.imprint,
+        status: req.body.status,
+        due_back: req.body.due_back
+    });
+    //save
+     if (errors) {
+        Book.find({},'title', function(err,results){
+            if (err) {next(err); return;};
+       /*     console.log('Book Instance ' + JSON.stringify(bookinstance));*/
+            res.render('bookinstance_form',{title:'Create Book Instance', errors: errors, book_instance: bookinstance, books: results});
+            return;    
+        }) 
+     } else {
+        bookinstance.save(function(err){
+             if (err) { next(err); return;}
+             res.redirect(bookinstance.url);
+        })
+     };
 };
 
+function isBookInstanceAvailable(id,callback) {
+    BookInstance.findById(id).populate('book').exec(function(err, bookinstance){
+        if (err) { callback(err,false); return;}
+        if (!bookinstance || bookinstance.status != 'Available') { 
+            callback(null, { available:false, instance: bookinstance})
+        } else {
+            callback(null, { available:true, instance: bookinstance})
+        }
+    });
+}
 // Display BookInstance delete form on GET
+// url /bookinstance/:id/delete
 exports.bookinstance_delete_get = function(req, res, next) {
-    res.send('NOT IMPLEMENTED: BookInstance delete GET');
+    isBookInstanceAvailable(req.params.id,function(err, result){
+        if (err) { next(err); return;}
+        if (!result.available) {
+            res.render('bookinstance_delete', {title: 'Delete Book Instance', errors: [{msg: 'Instance is not available'}]});
+        } else {
+            res.render('bookinstance_delete', {title: 'Delete Book Instance', book_instance: result.instance});
+        }
+    })
 };
 
 // Handle BookInstance delete on POST
+// url /bookinstance/:id/delete
 exports.bookinstance_delete_post = function(req, res, next) {
-    res.send('NOT IMPLEMENTED: BookInstance delete POST');
+    //validate
+    isBookInstanceAvailable(req.params.id, function(err, results){
+        if (err) {next(err); return;}
+        if (!results.available) {
+            if (results.instance) {
+                res.render('bookinstance_delete', {title: 'Delete Book Instance', errors: [{msg: 'Instance is not available'}]});
+            } else {
+                res.redirect('/catalog/bookinstances');
+            }
+        } else {
+            BookInstance.findByIdAndRemove(req.params.id,function(err, results){
+                if (err) { next(err); return; }
+                res.redirect('/catalog/bookinstances');
+            })
+        }
+    });
 };
 
 // Display BookInstance update form on GET

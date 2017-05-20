@@ -51,6 +51,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(function(req, res, next) {
   res.locals.user = req.user;
+  res.locals.format = function(d,f) {return require('moment')(d).format(f);}
   next();
 });
 app.use(express.static(path.join(__dirname, 'public')));

@@ -10,6 +10,6 @@ block content
     else if bookinstance.status=='Maintenance'
      span.text-danger #{bookinstance.status}
     else
-     span (Due: #{bookinstance.due_back_formatted})
+     span (Due: #{format(bookinstance.due_back,'MMMM Do, YYYY')})
   else
    li there are no book copies in this library

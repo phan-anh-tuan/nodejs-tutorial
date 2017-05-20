@@ -1,7 +1,7 @@
 extends layout
 block content
  h1 Author: #{author.name}
- p #{author.date_of_birth} - #{author.date_of_death}
+ p #{format(author.date_of_birth,'DD MMM, YYYY')} - #{format(author.date_of_death,'DD MMM, YYYY')}
  div(style='margin: 20px 0 0 20px')
   h4 Books
   dl

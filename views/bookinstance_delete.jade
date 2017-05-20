@@ -1,0 +1,15 @@
+extends layout
+block content
+ h1=title
+ if errors
+  h4 Book can't be delete
+  ul
+   each err in errors
+    li #{err.msg}
+  a.btn.btn-primary(href='/catalog/bookinstances') Return
+ else
+  if book_instance
+   h4 Are you sure you want to delete instance of book #{book_instance.book.title} ?
+   form(method='POST' action='')
+    button.btn.btn-primary(type='Submit') Submit
+  

@@ -11,11 +11,11 @@ html(lang='en')
   body
     div(class='container-fluid')
      if user 
-        div(style='float:right') Welcome #{user.username}&nbsp;
-         a(href='/logout') Sign out
+      div(style='float:right') Welcome #{user.username}&nbsp;
+       a(href='/logout') Sign out
      else 
-        div(style='float:right')
-         a(href='/login') Login
+      div(style='float:right')
+       a(href='/login') Login
      div(class='row')
       div(class='col-sm-2')
        block sidebar

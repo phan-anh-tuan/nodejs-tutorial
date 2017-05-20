@@ -5,6 +5,6 @@ block content
   each author in author_list
    li
     a(href=author.url) #{author.name}
-    | (#{author.date_of_birth} - #{author.date_of_death})
+    |&nbsp;(#{format(author.date_of_birth,'DD MMM, YYYY')} - #{format(author.date_of_death,'DD MMM, YYYY')})
   else
    li there is no authors
